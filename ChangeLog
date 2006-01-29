@@ -1,5 +1,7 @@
 2006-01-28  Michael Olson  <mwolson@gnu.org>
 
+	* erc-compat.el (erc-emacs-build-time): Define as a variable.
+
 	* erc-log.el (erc-log-setup-logging): Use write-file-functions.
 
 	* erc-*.el, erc.texi, NEWS: Add Arch taglines as per Emacs
@@ -12,6 +14,8 @@
 
 	* erc-stamp.el (erc-insert-aligned): Only use the special text
 	property when window-system is X.
+
+	* erc.texi: Adapt for inclusion in Emacs.
 
 2006-01-28  Johan Bockgård  <bojohan@users.sourceforge.net>
 

@@ -39,6 +39,7 @@
 (require 'erc)
 (require 'speedbar)
 (condition-case nil (require 'dframe) (error nil))
+(eval-when-compile (require 'cl))
 
 ;;; Customization:
 

@@ -32,6 +32,7 @@
 ;;; Code:
 
 (require 'ibuffer)
+(require 'ibuf-ext)
 (require 'erc)
 
 (defgroup erc-ibuffer nil

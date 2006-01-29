@@ -1,0 +1,6 @@
+# Common definitions for syncing ERC             -*- Shell-script -*-
+
+EMACS=~/proj/emacs/emacs
+ETC=$EMACS/etc
+LISP=$EMACS/lisp
+MAN=$EMACS/man

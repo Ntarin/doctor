@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Load common definitions
+. scripts/common.defs
+
+find . -maxdepth 1 -mindepth 1 -type f -exec cp {} $LISP/erc \;
+find ./etc -maxdepth 1 -mindepth 1 -type f -exec cp {} $ETC \;
+find ./man -maxdepth 1 -mindepth 1 -type f -exec cp {} $MAN \;

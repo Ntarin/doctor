@@ -40,9 +40,6 @@
 (require 'speedbar)
 (condition-case nil (require 'dframe) (error nil))
 
-(defconst erc-speedbar-version "$Revision: 1.22 $"
-  "ERC Speedbar version.")
-
 ;;; Customization:
 
 (defgroup erc-speedbar nil

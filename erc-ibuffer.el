@@ -34,9 +34,6 @@
 (require 'ibuffer)
 (require 'erc)
 
-(defconst erc-ibuffer-version "$Revision: 1.29 $"
-  "ERC ibuffer revision.")
-
 (defgroup erc-ibuffer nil
   "The Ibuffer group for ERC."
   :group 'erc)

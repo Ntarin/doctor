@@ -28,9 +28,6 @@
 
 ;;; Code:
 
-(defconst erc-compat-version "$Revision: 1.32 $"
-  "ERC compat revision.")
-
 (require 'format-spec)
 
 ;;;###autoload (autoload 'erc-define-minor-mode "erc-compat")

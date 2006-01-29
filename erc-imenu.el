@@ -47,9 +47,6 @@
 (require 'erc)
 (require 'imenu)
 
-(defconst erc-imenu-version "$Revision: 1.12 $"
-  "ERC imenu revision.")
-
 (defun erc-unfill-notice ()
   "Return text from point to a computed end as a string unfilled.
 Don't rely on this function, read it first!"

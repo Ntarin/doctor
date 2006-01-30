@@ -17,6 +17,11 @@
 	sections may be skipped if using the version of ERC that comes
 	with Emacs.
 
+2006-01-29  Edward O'Connor  <ted@oconnor.cx>
+
+	* erc-viper.el: Remove. Now that ERC is included in Emacs, these
+	work-arounds live in Viper itself.
+
 2006-01-28  Michael Olson  <mwolson@gnu.org>
 
 	* erc-*.el, erc.texi, NEWS: Add Arch taglines as per Emacs

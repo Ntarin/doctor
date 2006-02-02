@@ -66,7 +66,8 @@
 
 ;;; Code:
 
-(defconst erc-version-string "Version 5.1 (Emacs 22)"
+(defconst erc-version-string (concat "Version 5.1 (GNU Emacs "
+				     emacs-version ")")
   "ERC version.  This is used by function `erc-version'.")
 
 (eval-when-compile (require 'cl))

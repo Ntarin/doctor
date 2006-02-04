@@ -1,3 +1,8 @@
+2006-02-04  Michael Olson  <mwolson@gnu.org>
+
+	* erc.el (erc-cmd-SV): Don't display the version of Emacs here,
+	since we specify that in erc-version-string.
+
 2006-02-02  Michael Olson  <mwolson@gnu.org>
 
 	* erc.el (erc-version-string): Don't hardcode the version of Emacs

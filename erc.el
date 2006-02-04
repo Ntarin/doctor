@@ -3111,10 +3111,8 @@ the message given by REASON."
 
 (defun erc-cmd-SV ()
   "Say the current ERC and Emacs version into channel."
-  (erc-send-message (format "I'm using ERC %s with %s %s (%s%s%s)!"
+  (erc-send-message (format "I'm using ERC %s (%s%s%s)!"
 			    erc-version-string
-			    (if (featurep 'xemacs) "XEmacs" "GNU Emacs")
-			    emacs-version
 			    system-configuration
 			    (concat
 			     (cond ((featurep 'motif)

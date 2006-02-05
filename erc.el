@@ -66,8 +66,7 @@
 
 ;;; Code:
 
-(defconst erc-version-string (concat "Version 5.1 (GNU Emacs "
-				     emacs-version ")")
+(defconst erc-version-string "Version 5.1"
   "ERC version.  This is used by function `erc-version'.")
 
 (eval-when-compile (require 'cl))
@@ -3111,8 +3110,10 @@ the message given by REASON."
 
 (defun erc-cmd-SV ()
   "Say the current ERC and Emacs version into channel."
-  (erc-send-message (format "I'm using ERC %s (%s%s%s)!"
+  (erc-send-message (format "I'm using ERC %s with %s %s (%s%s%s)!"
 			    erc-version-string
+			    (if (featurep 'xemacs) "XEmacs" "GNU Emacs")
+			    emacs-version
 			    system-configuration
 			    (concat
 			     (cond ((featurep 'motif)
@@ -5773,7 +5774,7 @@ P may be an integer or a service name."
 If optional argument HERE is non-nil, insert version number at point."
   (interactive "P")
   (let ((version-string
-	 (format "ERC %s" erc-version-string)))
+	 (format "ERC %s (GNU Emacs %s)" erc-version-string emacs-version)))
     (if here
 	(insert version-string)
       (if (interactive-p)

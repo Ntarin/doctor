@@ -1,25 +1,7 @@
-2006-02-04  Michael Olson  <mwolson@gnu.org>
+2006-02-03  Zhang Wei  <id.brep@gmail.com>  (tiny change)
 
-	* ChangeLog.01, ChangeLog.02, ChangeLog.03, ChangeLog.04,
-	ChangeLog.05: Rename from ChangeLog.NNNN in order to disambiguate
-	the filenames in DOS.
-
-	* erc-hecomplete.el: Rename from erc-complete.el.
-
-	* erc-join.el: Rename from erc-autojoin.el.
-
-	* erc-networks.el: Rename from erc-nets.el.
-
-	* erc-services.el: Rename from erc-nickserv.el.
-
-	* erc.el (erc-cmd-SV): Don't display the version of Emacs here,
-	since we specify that in erc-version-string.
-
-2006-02-02  Michael Olson  <mwolson@gnu.org>
-
-	* erc.el (erc-version-string): Don't hardcode the version of Emacs
-	into the string.  Instead, concat `emacs-version'.  Thanks to
-	Zhang Wei for the report.
+	* erc.el (erc-version-string): Don't hard-code Emacs version.
+	(erc-version): Use emacs-version.
 
 2006-01-31  Michael Olson  <mwolson@gnu.org>
 
@@ -385,7 +367,7 @@
 	where global-mode-string is not a list.  Emacs22 permits this.
 
 
-See ChangeLog.05 for earlier changes.
+See ChangeLog.2005 for earlier changes.
 
     Copyright (C) 2006 Free Software Foundation, Inc.
   Copying and distribution of this file, with or without modification,

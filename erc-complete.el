@@ -1,4 +1,4 @@
-;;; erc-hecomplete.el --- Provides Nick name completion for ERC
+;;; erc-complete.el --- Provides Nick name completion for ERC
 
 ;; Copyright (C) 2001, 2002, 2004 Free Software Foundation, Inc.
 
@@ -29,7 +29,7 @@
 ;; pcomplete.  There is no autoload cookie in this file.  If you want
 ;; to use the code in this file, add the following to your ~/.emacs:
 
-;; (autoload 'erc-complete "erc-hecomplete" "Complete nick at point." t)
+;; (autoload 'erc-complete "erc-complete" "Complete nick at point." t)
 
 ;;; Code:
 
@@ -211,9 +211,8 @@ Window configurations are stored in
   (erc-at-beginning-of-line-p (he-dabbrev-beg)))
 
 (provide 'erc-complete)
-(provide 'erc-hecomplete)
 
-;;; erc-hecomplete.el ends here
+;;; erc-complete.el ends here
 ;;
 ;; Local Variables:
 ;; indent-tabs-mode: t

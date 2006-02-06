@@ -19,6 +19,9 @@
 
 	* erc-goodies.el: Docfix.
 
+	* erc-stamp.el: Use new arch tagline, since the other one wasn't
+	being treated properly.
+
 	* erc.el (erc-version-string): Release ERC 5.1.1
 
 2006-02-03  Zhang Wei  <id.brep@gmail.com>  (tiny change)

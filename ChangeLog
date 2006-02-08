@@ -22,6 +22,8 @@
 	of module names.
 	(erc-modules): Call erc-migrate-modules in the :get accessor.
 	(erc-modules, erc-update-modules): Update for new modules names.
+	(erc-cmd-SMV): Remove, since this does not give useful output due
+	to the version strings being removed from ERC modules.
 
 2006-02-05  Michael Olson  <mwolson@gnu.org>
 

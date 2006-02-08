@@ -3164,12 +3164,6 @@ the message given by REASON."
 			    (erc-modes)))
   t)
 
-(defun erc-cmd-SMV ()
-  "Say the current ERC module versions into channel."
-  (erc-send-message (format "I'm using the following module revisions: %s!"
-			    (erc-version-modules)))
-  t)
-
 (defun erc-cmd-DEOP (&rest people)
   "Remove the operator setting from user(s) given in PEOPLE."
   (when (> (length people) 0)

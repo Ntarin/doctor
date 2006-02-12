@@ -1794,14 +1794,11 @@ removed from the list will be disabled."
       (cond
        ;; yuck. perhaps we should bring the filenames into sync?
        ((string= req "erc-completion")
-	(setq req "erc-pcomplete")
-	(setq mod 'completion))
+	(setq req "erc-pcomplete"))
        ((string= req "erc-pcomplete")
-	(setq req "erc-pcomplete")
 	(setq mod 'completion))
        ((string= req "erc-autojoin")
-	(setq req "erc-join")
-	(setq mod 'autojoin)))
+	(setq req "erc-join")))
       (condition-case nil
 	  (require (intern req))
 	(error nil))

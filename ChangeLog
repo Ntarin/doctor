@@ -1,3 +1,7 @@
+2006-06-05  Romain Francoise  <romain@orebokech.com>
+
+	* erc.texi (History): Fix various typos.
+
 2006-04-05  Diane Murray  <disumu@x3y2z1.net>
 
 	* erc.el (erc-cmd-SV): Removed the exclamation point.  Show the

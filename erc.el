@@ -1777,12 +1777,12 @@ removed from the list will be disabled."
     :greedy t
     (const :tag "Set away status automatically" autoaway)
     (const :tag "Join channels automatically" autojoin)
-    (const :tag "Integrate with Big Brother Database" bbdb)
     (const :tag "Buttonize URLs, nicknames, and other text" button)
     (const :tag "Wrap long lines" fill)
     (const :tag "Launch an identd server on port 8113" identd)
     (const :tag "Highlight or remove IRC control characters"
 	   irccontrols)
+    (const :tag "List channels in a separate buffer" list)
     (const :tag "Save buffers in logs" log)
     (const :tag "Highlight pals, fools, and other keywords" match)
     (const :tag "Detect netsplits" netsplit)

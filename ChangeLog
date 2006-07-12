@@ -83,8 +83,6 @@
 	explicitly load every module.
 	(History): Update.
 
-	* erc-goodies.el (erc-handle-irc-url): Docfix.
-
 	* erc.el (erc-version-modules): Remove, since we do not use this
 	function anymore.
 	(erc-latest-version, erc-ediff-latest-version): Remove, since this

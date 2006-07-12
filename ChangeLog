@@ -1,3 +1,41 @@
+2006-07-09  Michael Olson  <mwolson@gnu.org>
+
+	* erc.el (erc-version-string): Release ERC 5.1.3.
+
+	* erc.texi: Update for the 5.1.3 release.
+
+	* erc-autoaway.el (erc-autoaway-set-back): Fix bug after returning
+	from being set automatically away and current buffer is not an ERC
+	buffer.
+
+	* erc-identd.el: Fix compiler error.
+
+	* erc.texi (Development): Use @subheading instead of @subsection.
+	(Advanced Usage): Add menu.
+	(Connecting): Fully document how to connect to an IRC server.
+	(Options, Tips and Tricks, Sample Configuration): New unwritten
+	sections.
+
+	* erc.el (erc-server, erc-port, erc-nick, erc-nick-uniquifier)
+	(erc-user-full-name, erc-password): Docfixes and customization
+	interface tweaks.
+	(erc-try-new-nick-p): Rename from
+	`erc-manual-set-nick-on-bad-nick-p' and invert meaning.
+	(erc-nickname-in-use): Use `erc-try-new-nick-p'.  Check the length
+	of `erc-nick-uniquifier', in case someone wants multiple
+	characters.
+	(erc-compute-server, erc-compute-nick, erc-compute-full-name)
+	(erc-compute-port): Docfixes.
+
+	* erc-log.el (log): Move all add-hook calls here, rather than
+	executing them immediately, and also cause them to be un-hooked
+	when the module is removed.
+	(erc-save-buffer-on-part): Move next to
+	`erc-save-queries-on-quit'.
+	(erc-save-buffer-on-quit, erc-save-queries-on-quit): Default to t.
+	(erc-log-write-after-send, erc-log-write-after-insert): Default to
+	nil.  This makes things fast, but reasonably failsafe, by default.
+
 2006-07-08  Michael Olson  <mwolson@gnu.org>
 
 	* erc-log.el (erc-log-insert-log-on-open): Make this nil by
@@ -9,8 +47,18 @@
 	ERC buffer.
 	(log): Use the aforementioned options.
 
+	* erc.texi (Modules): Document the "completion" module.
+
 	* erc-pcomplete.el (pcomplete-erc-nicks): Make sure that we don't
 	have a nil element in the list when ignore-self is non-nil.
+
+2006-07-05  Michael Olson  <mwolson@gnu.org>
+
+	* erc.el (erc-modules): Add the `page' module to the list.
+
+	* erc.texi (Modules): Add entries for `list' and `page' modules.
+	Change "spell" to "spelling".
+	(History): Use past tense throughout.
 
 2006-07-02  Michael Olson  <mwolson@gnu.org>
 
@@ -23,6 +71,42 @@
 	(erc-quit-reason-various, erc-part-reason-various): If no argument
 	is given, and no matches are found, use our default reason instead
 	of "nil".
+
+2006-06-30  Michael Olson  <mwolson@gnu.org>
+
+	* erc.texi (Modules): Mention identd.
+	(Releases): Update mailing list address and download location.
+	(Development): Refactor.  Provide updated directions for Arch.
+	Make URLs clickable.
+	(Keystroke Summary): Typo fix.  Use more Texinfo syntax.
+	(Getting Started): Give simpler example.  We do not need to
+	explicitly load every module.
+	(History): Update.
+
+	* erc-goodies.el (erc-handle-irc-url): Docfix.
+
+	* erc.el (erc-version-modules): Remove, since we do not use this
+	function anymore.
+	(erc-latest-version, erc-ediff-latest-version): Remove, since this
+	was only useful back when ERC consisted of one file.
+	(erc-modules): Add line for identd.
+	(erc-get-channel-mode-from-keypress): Typo fix.
+
+	* erc-imenu.el: Remove unnecessary lines in header.
+
+	* erc-goodies.el (erc-handle-irc-url): Docfix.
+
+	* erc-identd.el: Define an ERC module for this.
+	(erc-identd-start): Don't create a process buffer if possible.
+	Otherwise, use conventional hidden names for process buffers.
+
+2006-06-29  Michael Olson  <mwolson@gnu.org>
+
+	* erc-backend.el (erc-coding-system-for-target): Match
+	case-insensitively.  Use a pattern match instead of `assoc', as
+	per the documentation for `erc-encoding-coding-alist'.
+
+	* erc-track.el (erc-track-shorten-aggressively): Fix typo.
 
 2006-06-27  Michael Olson  <mwolson@gnu.org>
 
@@ -48,6 +132,10 @@
 	(erc-autoaway-reset-indicators): New function that resets some
 	indicators when the user is no longer away.
 	(autoaway): Add the above function to the 305 hook.
+
+2006-06-05  Romain Francoise  <romain@orebokech.com>
+
+	* erc.texi (History): Fix various typos.
 
 2006-06-04  Michael Olson  <mwolson@gnu.org>
 

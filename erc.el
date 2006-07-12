@@ -11,7 +11,7 @@
 ;;               Andreas Fuchs (afs@void.at)
 ;;               Gergely Nagy (algernon@midgard.debian.net)
 ;;               David Edmondson (dme@dme.org)
-;; Maintainer: Mario Lang (mlang@delysid.org)
+;; Maintainer: Michael Olson (mwolson@gnu.org)
 ;; Keywords: IRC, chat, client, Internet
 
 ;; This file is part of GNU Emacs.
@@ -36,12 +36,13 @@
 ;; ERC is an IRC client for Emacs.
 
 ;; For more information, see the following URLs:
-;; * http://sf.net/projects/erc/
+;; * http://sv.gnu.org/projects/erc/
 ;; * http://www.emacswiki.org/cgi-bin/wiki.pl?EmacsIRCClient
 
-;; Jul-26-2001. erc.el is now in CVS on SourceForge.  I invite everyone
-;; who wants to hack it to contact me <mlang@delysid.org> in order to
-;; get write access on the CVS.
+;; As of 2006-06-13, ERC development is now hosted on Savannah
+;; (http://sv.gnu.org/projects/erc).  I invite everyone who wants to
+;; hack on it to contact me <mwolson@gnu.org> in order to get write
+;; access to the shared Arch archive.
 
 ;; Installation:
 
@@ -77,12 +78,12 @@
 (require 'erc-menu)
 
 (defvar erc-official-location
-  "http://erc.sf.net (comments mailto://mlang@delysid.org)"
+  "http://emacswiki.org/cgi-bin/wiki/ERC (mailing list: erc-discuss@gnu.org)"
   "Location of the ERC client on the Internet.")
 
 (defgroup erc nil
   "Emacs Internet Relay Chat client."
-  :link '(url-link "http://www.emacswiki.org/cgi-bin/wiki.pl?EmacsIRCClient")
+  :link '(url-link "http://www.emacswiki.org/cgi-bin/wiki/ERC")
   :prefix "erc-"
   :group 'applications)
 
@@ -871,7 +872,7 @@ As an example:
 	(\"xmms\" dme:now-playing)
 	(\"version\" erc-quit-reason-normal)
 	(\"home\" \"Gone home !\")
-	(\"\" \"Default Reason\")))
+	(\"^$\" \"Default Reason\")))
 If the user types \"/quit zippy\", then a Zippy the Pinhead quotation
 will be used as the quit message."
   :group 'erc-quit-and-part
@@ -895,7 +896,7 @@ As an example:
 	(\"xmms\" dme:now-playing)
 	(\"version\" erc-part-reason-normal)
 	(\"home\" \"Gone home !\")
-	(\"\" \"Default Reason\")))
+	(\"^$\" \"Default Reason\")))
 If the user types \"/part zippy\", then a Zippy the Pinhead quotation
 will be used as the part message."
   :group 'erc-quit-and-part
@@ -1373,7 +1374,10 @@ server buffer")
 (defun erc-active-buffer ()
   "Return the value of `erc-active-buffer' for the current server.
 Defaults to the server buffer."
-  (with-current-buffer (erc-server-buffer) erc-active-buffer))
+  (with-current-buffer (erc-server-buffer)
+    (if (buffer-live-p erc-active-buffer)
+	erc-active-buffer)
+    (setq erc-active-buffer (current-buffer))))
 
 (defun erc-set-active-buffer (buffer)
   "Set the value of `erc-active-buffer' to BUFFER."
@@ -1595,12 +1599,13 @@ server connection, or nil which means all open connections."
     (delq
      nil
      (mapcar (lambda (buf)
-	       (with-current-buffer buf
-		 (and (eq major-mode 'erc-mode)
-		      (or (not proc)
-			  (eq proc erc-server-process))
-		      (funcall predicate)
-		      buf)))
+	       (when (buffer-live-p buf)
+		 (with-current-buffer buf
+		   (and (eq major-mode 'erc-mode)
+			(or (not proc)
+			    (eq proc erc-server-process))
+			(funcall predicate)
+			buf))))
 	     (buffer-list)))))
 
 (defun erc-buffer-list (&optional predicate proc)
@@ -3047,8 +3052,8 @@ If S is non-nil, it will be used as the quit reason."
     (cond
      ((functionp res) (funcall res))
      ((stringp res) res)
-     ;; hopefully never reached
-     (s))))
+     (s s)
+     (t (erc-quit-reason-normal)))))
 
 (defun erc-part-reason-normal (&optional s)
   "Normal part message.
@@ -3074,7 +3079,8 @@ If S is non-nil, it will be used as the quit reason."
     (cond
      ((functionp res) (funcall res))
      ((stringp res) res)
-     (s))))
+     (s s)
+     (t (erc-part-reason-normal)))))
 
 (defun erc-cmd-QUIT (reason)
   "Disconnect from the current server.
@@ -5098,13 +5104,16 @@ If ARG is non-nil and not positive, turns CTCP replies off."
 (defun erc-toggle-flood-control (&optional arg)
   "Toggle use of flood control on sent messages.
 
-If ARG is non-nil, use flood control.
-If ARG is nil, do not use flood control.
+If ARG is positive, use flood control.
+If ARG is non-nil and not positive, do not use flood control.
 
 See `erc-server-flood-margin' for an explanation of the available
 flood control parameters."
   (interactive "P")
-  (setq erc-flood-protect arg)
+  (cond ((and (numberp arg) (> arg 0))
+	 (setq erc-flood-protect t))
+	(arg (setq erc-flood-protect nil))
+	(t (setq erc-flood-protect (not erc-flood-protect))))
   (message "ERC flood control is %s"
 	   (cond (erc-flood-protect "ON")
 		 (t "OFF"))))

@@ -1,5 +1,8 @@
 2006-07-12  Michael Olson  <mwolson@gnu.org>
 
+	* erc-match.el (erc-log-matches): Bind inhibit-read-only rather
+	than call toggle-read-only.
+
 	* erc.el (erc-handle-irc-url): Move here from erc-goodies.el and
 	add autoload cookie.
 

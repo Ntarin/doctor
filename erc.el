@@ -67,7 +67,7 @@
 
 ;;; Code:
 
-(defconst erc-version-string "Version 5.1.3"
+(defconst erc-version-string "Version 5.1.4"
   "ERC version.  This is used by function `erc-version'.")
 
 (eval-when-compile (require 'cl))
@@ -1392,8 +1392,8 @@ server buffer")
 Defaults to the server buffer."
   (with-current-buffer (erc-server-buffer)
     (if (buffer-live-p erc-active-buffer)
-	erc-active-buffer)
-    (setq erc-active-buffer (current-buffer))))
+	erc-active-buffer
+      (setq erc-active-buffer (current-buffer)))))
 
 (defun erc-set-active-buffer (buffer)
   "Set the value of `erc-active-buffer' to BUFFER."

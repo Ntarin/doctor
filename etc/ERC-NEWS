@@ -1,7 +1,5 @@
 ERC NEWS                                                       -*- outline -*-
 
-* Changes in ERC 5.2 (unreleased)
-
 * Changes in ERC 5.1.4
 
 ** Make find-function and find-variable work in Emacs 22 for

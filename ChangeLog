@@ -3,6 +3,8 @@
 	* erc.el (erc-version-string): Call this Version 5.2 stable
 	pre-release, since it diverges slightly from our 5.2 branch, in
 	that unstable features are not included.
+	(erc-update-modules): Display better error message when module not
+	found.
 
 2006-11-12  Michael Olson  <mwolson@gnu.org>
 

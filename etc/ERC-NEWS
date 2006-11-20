@@ -1,6 +1,6 @@
 ERC NEWS                                                       -*- outline -*-
 
-* Changes in ERC 5.2 (not yet released)
+* Changes in ERC 5.2 (stable pre-release for Emacs 22)
 
 ** M-x erc RET now starts ERC.
 `erc-select' has been changed to `erc'.  `erc-select' still remains as

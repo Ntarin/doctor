@@ -1,3 +1,20 @@
+2006-11-12  Michael Olson  <mwolson@gnu.org>
+
+	* erc-log.el: Save all log buffers when Emacs exits, in case
+	someone ignores the warning about open processes.  Remove the
+	advice code in the commentary.
+	(erc-save-query-buffers): Docfix.
+	(erc-log-save-all-buffers): New function that saves all ERC
+	buffers to logs.
+	(erc-current-logfile): Fix bug in filename selection, where the
+	current buffer was erroneously being preferred over the given
+	buffer.
+
+2006-11-08  Michael Olson  <mwolson@gnu.org>
+
+	* erc.el (erc-string-to-port): Avoid error when a numerical port
+	is passed.  Thanks to Zekeriya KOÇ for the report.
+
 2006-11-08  "Łukasz Demianiuk"  <ldemianiuk@gmail.com> (tiny change)
 
 	* erc.el (erc-header-line): Fix typo.
@@ -10,10 +27,40 @@
 	* erc-autoaway.el (erc-autoaway-reestablish-idletimer):
 	* erc-truncate.el (truncate): Fix typo in docstring.
 
+2006-10-21  Michael Olson  <mwolson@gnu.org>
+
+	* erc.el (erc-iswitchb): Fix bug when hitting C-c C-b without
+	first loading iswitchb.  Thanks to Leo for the report.
+
+2006-10-10  Michael Olson  <mwolson@gnu.org>
+
+	* erc.el (erc-default-port): Make the default be 6667 instead of
+	ircd. since Mac OS X apparently has problems with looking up that
+	port name.
+
+	* erc-backend.el (353): Receive names after displaying the initial
+	message, instead of before.
+
+2006-10-05  Diane Murray  <disumu@x3y2z1.net>
+
+	* erc.el (erc-my-nick-face): New face.
+	(erc): Use FULL-NAME argument, not `erc-user-full-name'.  This
+	fixes a bug where the :full-name argument passed to the function
+	was not respected.
+	(erc-format-my-nick): Use `erc-my-nick-face'.  This should help
+	make it easier to find messages you sent in conversations when
+	`erc-show-my-nick' is non-nil.
+	(erc-compute-server): Doc fix.
+
 2006-09-11  Michael Olson  <mwolson@gnu.org>
 
 	* erc-nicklist.el (erc-nicklist-insert-contents): Add missing
 	parenthesis.  Thanks to Stephan Stahl for the report.
+
+2006-09-10  Eric Hanchrow  <offby1@blarg.net>
+
+	* erc.el (erc-cmd-IGNORE): Prompt user if this might be a regexp
+	instead of a single user.
 
 2006-09-10  Michael Olson  <mwolson@gnu.org>
 
@@ -21,6 +68,12 @@
 	buffer and a process exists already, create a new buffer.
 	(erc-open): If the IRC session was continued, restore the old
 	point.  Thanks to Stephan Stahl for the report.
+	(erc-member-ignore-case): Coding style tweak.
+	(erc-cmd-UNIGNORE): Quote the user before comparison.  If we don't
+	find the user listed verbatim, try to match them against the list
+	using string-match.  In this case, prompt as to whether the regexp
+	should be removed.
+	(erc-ignored-user-p): Remove CL-ism.
 
 	* erc-autoaway.el (erc-autoaway-possibly-set-away): Check to see
 	whether we are already away.

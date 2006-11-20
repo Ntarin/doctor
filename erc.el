@@ -1164,6 +1164,12 @@ See the variable `erc-command-indicator'."
   "ERC face for errors."
   :group 'erc-faces)
 
+;; same default color as `erc-input-face'
+(defface erc-my-nick-face '((t (:bold t :foreground "brown")))
+  "ERC face for your current nickname in messages sent by you.
+See also `erc-show-my-nick'."
+  :group 'erc-faces)
+
 (defface erc-nick-default-face '((t (:bold t)))
   "ERC nickname default face."
   :group 'erc-faces)
@@ -1432,7 +1438,7 @@ Turning on `erc-mode' runs the hook `erc-mode-hook'."
 (defconst erc-default-server "irc.freenode.net"
   "IRC server to use if it cannot be detected otherwise.")
 
-(defconst erc-default-port "ircd"
+(defconst erc-default-port "6667"
   "IRC port to use if it cannot be detected otherwise.")
 
 (defcustom erc-join-buffer 'buffer
@@ -1554,7 +1560,8 @@ All strings are compared according to IRC protocol case rules, see
   (catch 'result
     (while list
       (if (string= string (erc-downcase (car list)))
-	  (throw 'result list) (setq list (cdr list))))))
+	  (throw 'result list)
+	(setq list (cdr list))))))
 
 (defmacro erc-with-buffer (spec &rest body)
   "Execute BODY in the buffer associated with SPEC.
@@ -1662,7 +1669,7 @@ If `erc-track-mode' is in enabled, put the last element of
 Due to some yet unresolved reason, global function `iswitchb-mode'
 needs to be active for this function to work."
   (interactive "P")
-  (eval-when-compile
+  (eval-and-compile
     (require 'iswitchb))
   (let ((iswitchb-make-buflist-hook
 	 (lambda ()
@@ -2095,7 +2102,7 @@ be invoked for the values of the other parameters."
   (interactive (erc-select-read-args))
 
   (run-hook-with-args 'erc-before-connect server port nick)
-  (erc-open server port nick erc-user-full-name t password))
+  (erc-open server port nick full-name t password))
 
 (defalias 'erc-select 'erc)
 
@@ -2537,7 +2544,11 @@ therefore has to contain the command itself as well."
   "Ignore USER.  This should be a regexp matching nick!user@host.
 If no USER argument is specified, list the contents of `erc-ignore-list'."
   (if user
-      (progn
+      (let ((quoted (regexp-quote user)))
+	(when (and (not (string= user quoted))
+		   (y-or-n-p (format "Use regexp-quoted form (%s) instead? "
+				     quoted)))
+	  (setq user quoted))
 	(erc-display-line
 	 (erc-make-notice (format "Now ignoring %s" user))
 	 'active)
@@ -2555,16 +2566,22 @@ If no USER argument is specified, list the contents of `erc-ignore-list'."
 (defun erc-cmd-UNIGNORE (user)
   "Remove the user specified in USER from the ignore list."
   (let ((ignored-nick (car (with-current-buffer (erc-server-buffer)
-			     (erc-member-ignore-case user erc-ignore-list)))))
-    (if (null ignored-nick)
+			     (erc-member-ignore-case (regexp-quote user)
+						     erc-ignore-list)))))
+    (unless ignored-nick
+      (if (setq ignored-nick (erc-ignored-user-p user))
+	  (unless (y-or-n-p (format "Remove this regexp (%s)? "
+				    ignored-nick))
+	    (setq ignored-nick nil))
 	(erc-display-line
 	 (erc-make-notice (format "%s is not currently ignored!" user))
-	 'active)
+	 'active)))
+    (when ignored-nick
       (erc-display-line
        (erc-make-notice (format "No longer ignoring %s" user))
-       'active))
-    (with-current-buffer (erc-server-buffer)
-      (setq erc-ignore-list (delete ignored-nick erc-ignore-list))))
+       'active)
+      (with-current-buffer (erc-server-buffer)
+	(setq erc-ignore-list (delete ignored-nick erc-ignore-list)))))
   t)
 
 (defun erc-cmd-CLEAR ()
@@ -3868,7 +3885,7 @@ See also `erc-format-nick-function'."
 	    (nick (erc-current-nick)))
 	(concat
 	 (erc-propertize open 'face 'erc-default-face)
-	 (erc-propertize nick 'face 'erc-nick-default-face)
+	 (erc-propertize nick 'face 'erc-my-nick-face)
 	 (erc-propertize close 'face 'erc-default-face)))
     (let ((prefix "> "))
       (erc-propertize prefix 'face 'erc-default-face))))
@@ -5056,10 +5073,10 @@ The previous default target of QUERY type gets removed"
 Takes a full SPEC of a user in the form \"nick!login@host\", and
 matches against all the regexp's in `erc-ignore-list'.  If any
 match, returns that regexp."
-  (dolist (ignored (with-current-buffer (erc-server-buffer) erc-ignore-list))
-    (if (string-match ignored spec)
-	;; We have `require'd cl, so we can return from the block named nil
-	(return ignored))))
+  (catch 'found
+    (dolist (ignored (with-current-buffer (erc-server-buffer) erc-ignore-list))
+      (if (string-match ignored spec)
+	  (throw 'found ignored)))))
 
 (defun erc-ignored-reply-p (msg tgt proc)
   ;; FIXME: this docstring needs fixing -- Lawrence 2004-01-08
@@ -5415,7 +5432,7 @@ Sets the buffer local variables:
 This tries a number of increasingly more default methods until a
 non-nil value is found.
 
-- SERVER (the argument passwd to this function)
+- SERVER (the argument passed to this function)
 - The `erc-server' option
 - The value of the IRCSERVER environment variable
 - The `erc-default-server' variable"
@@ -5830,10 +5847,12 @@ P may be an integer or a service name."
 
 (defun erc-string-to-port (s)
   "Convert string S to either an integer port number or a service name."
-  (let ((n (string-to-number s)))
-    (if (= n 0)
-	s
-      n)))
+  (if (numberp s)
+      s
+    (let ((n (string-to-number s)))
+      (if (= n 0)
+	  s
+	n))))
 
 (defun erc-version (&optional here)
   "Show the version number of ERC in the minibuffer.

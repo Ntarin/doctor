@@ -15,6 +15,18 @@
 	* erc-nicklist.el (erc-nicklist-insert-contents): Add missing
 	parenthesis.  Thanks to Stephan Stahl for the report.
 
+2006-08-21  Diane Murray  <disumu@x3y2z1.net>
+
+	* erc-track.el (erc-track-mode-line-mouse-face): New variable.
+	(erc-make-mode-line-buffer-name): Add help-echo and mouse-face
+	properties to channel name.
+
+2006-08-14  Diane Murray  <disumu@x3y2z1.net>
+
+	* erc-menu.el: Updated copyright years.  Removed EmacsWiki URL.
+	(erc-menu-definition): Name the menu "ERC" instead of "IRC" to
+	avoid confusion with rcirc and other clients.
+
 2006-08-13  Romain Francoise  <romain@orebokech.com>
 
 	* erc-match.el (erc-log-matches-make-buffer): End `y-or-n-p'
@@ -42,6 +54,9 @@
 	'disconnected-noreconnect entries.  Avoid long lines.
 
 2006-08-06  Michael Olson  <mwolson@gnu.org>
+
+	* erc-backend.el (erc-server-send-queue): Update from Circe
+	version of this function.
 
 	* erc.el (erc-arrange-session-in-multiple-windows): Fix bug with
 	multi-tty Emacs.

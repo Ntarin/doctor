@@ -23,7 +23,7 @@
 	* erc.el (erc-string-to-port): Avoid error when a numerical port
 	is passed.  Thanks to Zekeriya KOÇ for the report.
 
-2006-11-08  "Łukasz Demianiuk"  <ldemianiuk@gmail.com> (tiny change)
+2006-11-08  Łukasz Demianiuk  <ldemianiuk@gmail.com>  (tiny change)
 
 	* erc.el (erc-header-line): Fix typo.
 

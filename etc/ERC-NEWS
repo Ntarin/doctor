@@ -1,5 +1,13 @@
 ERC NEWS                                                       -*- outline -*-
 
+* Changes in ERC 5.2 (not yet released)
+
+** M-x erc RET now starts ERC.
+`erc-select' has been changed to `erc'.  `erc-select' still remains as
+an alias of `erc'. Likewise, `erc-select-ssl' has been renamed to
+`erc-ssl' with `erc-select-ssl' as its alias.  The function that was
+known as `erc' is now `erc-open'.
+
 * Changes in ERC 5.1.4
 
 ** Make find-function and find-variable work in Emacs 22 for

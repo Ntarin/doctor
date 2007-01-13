@@ -355,6 +355,17 @@ nicknames with erc-server-user struct instances.")
 	      (cdr (assq (aref s (match-beginning 0)) c)))))
     s))
 
+(defmacro erc-with-server-buffer (&rest body)
+  "Execute BODY in the current ERC server buffer.
+If no server buffer exists, return nil."
+  (let ((buffer (make-symbol "buffer")))
+    `(let ((,buffer (erc-server-buffer)))
+       (when (buffer-live-p ,buffer)
+	 (with-current-buffer ,buffer
+	   ,@body)))))
+(put 'erc-with-server-buffer 'lisp-indent-function 0)
+(put 'erc-with-server-buffer 'edebug-form-spec '(body))
+
 (defstruct (erc-server-user (:type vector) :named)
   ;; User data
   nickname host login full-name info

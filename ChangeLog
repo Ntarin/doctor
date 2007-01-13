@@ -1,3 +1,66 @@
+2007-01-13  Michael Olson  <mwolson@gnu.org>
+
+	* erc.el (erc-command-regexp): New variable that is used to match
+	a command.
+	(erc-send-input): Use it.  This fixes a bug where paths --
+	"/usr/bin/foo", for example -- were being displayed as commands,
+	but still sent correctly.
+	(erc-extract-command-from-line): Use it.
+
+2007-01-11  Diane Murray  <disumu@x3y2z1.net>
+
+	* erc.el (erc-find-parsed-property): Moved here from erc-track.el
+	since it can be useful in general.
+
+	* erc-track.el (erc-find-parsed-property): Removed.
+
+	* erc-capab.el (erc-capab-find-parsed): Removed.
+	(erc-capab-identify-add-prefix): Use `erc-find-parsed-property'.
+
+	* erc.el (erc-open): Run `erc-before-connect' hook here.  This
+	makes sure the hook always gets called before a connection is
+	made, as some functions, like `erc-handle-irc-url', use `erc-open'
+	instead of `erc'.
+	(erc): Removed `erc-before-connect' hook.
+
+	* erc-menu.el (erc-menu-definition): Put items specific to
+	channels in a "Current channel" submenu.
+
+	* erc-backend.el (321, 323): Display channel list in server buffer
+	when not using the channel list module.
+
+	* erc.el: Updated copyright years.
+	(erc-version-string): Set to 5.2 (devel).
+	(erc-format-lag-time): Fixed to work when `erc-server-lag' is nil.
+	(erc-update-mode-line-buffer): Set the header face.
+
+2007-01-11  Michael Olson  <mwolson@gnu.org>
+
+	* erc-bbdb.el (erc-bbdb-popup-type): Fix customization type and
+	documentation.
+
+	* erc-services.el (erc-nickserv-identify-mode): Improve
+	documentation for nick-change option and move higher to fix
+	compiler warning.  Avoid a recursive load error.
+	(erc-nickserv-alist): Add simple entry for BitlBee, to avoid
+	"NickServ is AWAY: User is offline" error.  Oddly enough, bitlbee
+	was smart enough to recognize that as an authentication request
+	and log in regardless, which is why I didn't notice this earlier.
+	(erc-nickserv-alist-sender, erc-nickserv-alist-regexp)
+	(erc-nickserv-alist-nickserv, erc-nickserv-alist-ident-keyword)
+	(erc-nickserv-alist-use-nick-p)
+	(erc-nickserv-alist-ident-command): New accessors for
+	erc-nickserv-alist.  Using nth is unwieldy.
+	(erc-nickserv-identify-autodetect)
+	(erc-nickserv-identify-on-connect)
+	(erc-nickserv-identify-on-nick-change, erc-nickserv-identify): Use
+	the new accessors.
+
+2007-01-11  Diane Murray  <disumu@x3y2z1.net>
+
+	* NEWS: Added note for `erc-my-nick-face'.  Fixed capab-identify
+	wording.
+
 2007-01-10  Diane Murray  <disumu@x3y2z1.net>
 
 	* erc.el (erc-mode-line-format): Added %l to documentation.

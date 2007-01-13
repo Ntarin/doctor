@@ -1,7 +1,7 @@
 ;; erc.el --- An Emacs Internet Relay Chat client
 
 ;; Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
-;;   2006 Free Software Foundation, Inc.
+;;   2006, 2007 Free Software Foundation, Inc.
 
 ;; Author: Alexander L. Belikoff (alexander@belikoff.net)
 ;; Contributors: Sergey Berezin (sergey.berezin@cs.cmu.edu),
@@ -1898,6 +1898,7 @@ Returns the buffer for the given server or channel."
 	(old-buffer (current-buffer))
 	old-point
 	continued-session)
+    (when connect (run-hook-with-args 'erc-before-connect server port nick))
     (erc-update-modules)
     (set-buffer buffer)
     (setq old-point (point))
@@ -2111,8 +2112,6 @@ server and full-name will be set to those values, whereas
 `erc-compute-port', `erc-compute-nick' and `erc-compute-full-name' will
 be invoked for the values of the other parameters."
   (interactive (erc-select-read-args))
-
-  (run-hook-with-args 'erc-before-connect server port nick)
   (erc-open server port nick full-name t password))
 
 (defalias 'erc-select 'erc)
@@ -4888,6 +4887,9 @@ Specifically, return the position of `erc-insert-marker'."
    erc-input-marker
    (erc-end-of-input-line)))
 
+(defvar erc-command-regexp "^/\\([A-Za-z]+\\)\\(\\s-+.*\\|\\s-*\\)$"
+  "Regular expression used for matching commands in ERC.")
+
 (defun erc-send-input (input)
   "Treat INPUT as typed in by the user. It is assumed that the input
 and the prompt is already deleted.
@@ -4909,7 +4911,7 @@ This returns non-nil only iff we actually send anything."
       (run-hook-with-args 'erc-send-pre-hook input)
       (when erc-send-this
 	(if (or (string-match "\n" str)
-		(not (char-equal (aref str 0) ?/)))
+		(not (string-match erc-command-regexp str)))
 	    (mapc
 	     (lambda (line)
 	       (mapc
@@ -4974,7 +4976,7 @@ current position."
   "Extract command and args from the input LINE.
 If no command was given, return nil.  If command matches, return a
 list of the form: (command args) where both elements are strings."
-  (when (string-match "^/\\([A-Za-z]+\\)\\(\\s-+.*\\|\\s-*\\)$" line)
+  (when (string-match erc-command-regexp line)
     (let* ((cmd (erc-command-symbol (match-string 1 line)))
 	   ;; note: return is nil, we apply this simply for side effects
 	   (canon-defun (while (and cmd (symbolp (symbol-function cmd)))
@@ -5785,9 +5787,11 @@ if `erc-away' is non-nil."
 
 (defun erc-format-lag-time ()
   "Return the estimated lag time to server, `erc-server-lag'."
-  (format "lag:%.0f" (when (erc-server-buffer-live-p)
-		       (with-current-buffer (process-buffer erc-server-process)
-			 erc-server-lag))))
+  (let ((lag (when (erc-server-buffer-live-p)
+	       (with-current-buffer (process-buffer erc-server-process)
+		 erc-server-lag))))
+    (cond (lag (format "lag:%.0f" lag))
+	  (t ""))))
 
 (defun erc-update-mode-line-buffer (buffer)
   "Update the mode line in a single ERC buffer BUFFER."
@@ -5841,7 +5845,10 @@ if `erc-away' is non-nil."
 			      (erc-propertize header 'help-echo help-echo
 					      'face face)
 			    (erc-propertize header 'help-echo help-echo))))))
-		(t (setq header-line-format header))))))
+		(t (setq header-line-format
+			 (if face
+			     (erc-propertize header 'face face)
+			   header)))))))
     (if (featurep 'xemacs)
 	(redraw-modeline)
       (force-mode-line-update))))
@@ -6194,6 +6201,10 @@ This function should be on `erc-kill-channel-hook'."
 		       nil tgt))))
 
 ;;; Dealing with `erc-parsed'
+
+(defun erc-find-parsed-property ()
+  "Find the next occurrence of the `erc-parsed' text property."
+  (text-property-not-all (point-min) (point-max) 'erc-parsed nil))
 
 (defun erc-get-parsed-vector (point)
   "Return the whole parsed vector on POINT."

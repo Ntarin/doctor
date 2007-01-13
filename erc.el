@@ -1797,6 +1797,10 @@ removed from the list will be disabled."
     (const :tag "Set away status automatically" autoaway)
     (const :tag "Join channels automatically" autojoin)
     (const :tag "Buttonize URLs, nicknames, and other text" button)
+    (const
+     :tag
+     "Mark unidentified users on freenode and other servers supporting CAPAB"
+     capab-identify)
     (const :tag "Wrap long lines" fill)
     (const :tag "Launch an identd server on port 8113" identd)
     (const :tag "Highlight or remove IRC control characters"
@@ -1807,8 +1811,7 @@ removed from the list will be disabled."
     (const :tag "Detect netsplits" netsplit)
     (const :tag "Don't display non-IRC commands after evaluation"
 	   noncommands)
-    (const :tag
-	   "Notify when the online status of certain users changes"
+    (const :tag "Notify when the online status of certain users changes"
 	   notify)
     (const :tag "Complete nicknames and commands (programmable)"
 	   completion)
@@ -1838,6 +1841,8 @@ removed from the list will be disabled."
       (setq req (concat "erc-" (symbol-name mod)))
       (cond
        ;; yuck. perhaps we should bring the filenames into sync?
+       ((string= req "erc-capab-identify")
+	(setq req "erc-capab"))
        ((string= req "erc-completion")
 	(setq req "erc-pcomplete"))
        ((string= req "erc-pcomplete")
@@ -4306,8 +4311,10 @@ See also `erc-display-message'."
   nil)
 
 (defun erc-process-away (proc away-p)
-  ;; FIXME: This docstring is AWFUL -- Lawrence 2004-01-08
-  "Process the user being away, or returning from an away break."
+  "Toggle the away status of the user depending on the value of AWAY-P.
+
+If nil, set the user as away.
+If non-nil, return from being away."
   (let ((sessionbuf (process-buffer proc)))
     (when sessionbuf
       (with-current-buffer sessionbuf

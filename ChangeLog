@@ -734,7 +734,29 @@
 	<C-tab> for `erc-button-previous' as it is a more standard key
 	binding for this type of function.
 
+2006-02-28  Diane Murray  <disumu@x3y2z1.net>
+
+	* erc-capab.el: Removed things that were accidentally committed on
+	2006-02-20.  Removed Todo section.
+	(erc-capab-unidentified): Removed.
+
+2006-02-26  Michael Olson  <mwolson@gnu.org>
+
+	* erc-capab.el: Use (eval-when-compile (require 'cl)).
+	(erc-capab-unidentified): Fix compiler warning by specifying
+	group.
+
+2006-02-20  Diane Murray  <disumu@x3y2z1.net>
+
+	* erc-capab.el (erc-capab-send-identify-messages): Fixed comment
+	to explain thoughts better.  `erc-server-parameters' is an
+	associated list when it's set, not a string.
+
 2006-02-19  Michael Olson  <mwolson@gnu.org>
+
+	* erc-capab.el (erc-capab-send-identify-messages): Make sure some
+	parameters are strings before using them.  Thanks to Alejandro
+	Benitez for the report.
 
 	* erc.el (erc-version-string): Release ERC 5.1.2.
 
@@ -785,8 +807,13 @@
 
 2006-02-11  Michael Olson  <mwolson@gnu.org>
 
-	* erc.el (erc-update-modules): Make some requirements shorter, so
-	that it's easier to see why they are needed.
+	* erc.el (erc-update-modules): Handle erc-capab-identify
+	correctly.  Make some requirements shorter, so that it's easier to
+	see why they are needed.
+
+	* erc-capab.el: Add autoload cookie for capab-identify.
+	(erc-capab-send-identify-messages, erc-capab-identify-activate):
+	Minor whitespace fix in code.
 
 	* erc-stamp.el (erc-timestamp-use-align-to): Renamed from
 	`erc-timestamp-right-align-by-pixel'.  Set the default based on
@@ -810,10 +837,20 @@
 	(erc-list-channels): Was `erc-cmd-LIST', renamed.
 	(erc-list-channels-simple): New function.
 
-	* erc.el (erc-modules): Added `list' to enabled modules.  Moved
-	customization options left in source code.
+	* erc.el (erc-modules): Added `list' to enabled modules.  Changed
+	`capab-identify' description.  Moved customization options left in
+	source code.
 
 	* erc-menu.el (erc-menu-definition): Use `erc-list-channels'.
+
+	* erc-capab.el: Put a little more detail into Usage section.
+	(define-erc-module): Run `erc-capab-identify-setup' in all open
+	server buffers when enabling.
+	(erc-capab-identify-setup): Make PROC and PARSED optional
+	arguments.
+	(erc-capab-identify-add-prefix): Simplified nickname regexp.  This
+	should now also match nicknames that are formatted differently
+	than the default.
 
 	* erc-spelling.el (define-erc-module): Make sure there's a buffer
 	before calling `with-current-buffer'.
@@ -831,11 +868,33 @@
 2006-02-09  Diane Murray  <disumu@x3y2z1.net>
 
 	* erc.el (erc-get-parsed-vector, erc-get-parsed-vector-nick)
+	* erc-capab.el: Require erc.
+	(erc-capab-send-identify-messages): Use `erc-server-send'.
+	(erc-capab-identify-remove/set-identified-flag): Use 1 and 0 as
+	the flags so we can also check whether the `erc-identified' text
+	property is there at all.
+	(erc-capab-identify-add-prefix): Use `erc-capab-find-parsed'.
+	This fixes a bug where the prefix wasn't inserted when timestamps
+	are inserted on the right.  Tweaked nickname regexp.
+	(erc-capab-find-parsed): New function.
+	(erc-capab-get-unidentified-nickname): Updated to check for 0
+	flag.  Only get nickname if there's a nickuserhost associated with
+	this message.
+
+	* erc-capab.el: New file.  Adds the new module
+	`erc-capab-identify', which allows flagging of unidentified users
+	on servers running an ircd based on dancer - irc.freenode.net, for
+	example.
+
+	* erc.el (erc-modules): Added `capab-identify' to options.
+	(erc-get-parsed-vector, erc-get-parsed-vector-nick)
 	(erc-get-parsed-vector-type): Moved here from erc-match.el.
 
 	* erc-match.el (erc-get-parsed-vector, erc-get-parsed-vector-nick)
 	(erc-get-parsed-vector-type): Moved these functions to erc.el
 	since they can be useful outside of the text matching module.
+
+	* NEWS: Added erc-capab.el.
 
 	* erc-dcc.el, erc-stamp.el, erc-xdcc.el: Changed "Emacs IRC Client"
 	to "ERC".

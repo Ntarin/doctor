@@ -393,6 +393,9 @@
 	current ERC server buffer and runs some code.  If no server buffer
 	is available, return nil.  This is a useful way to access
 	variables in the server buffer.
+	(erc-open-server-buffer-p): New function that returns non-nil if
+	the given buffer is an ERC server buffer that has an open IRC
+	process.
 
 2006-08-14  Diane Murray  <disumu@x3y2z1.net>
 

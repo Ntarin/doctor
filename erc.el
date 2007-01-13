@@ -1350,6 +1350,14 @@ If BUFFER is nil, the current buffer is used."
     (and (eq major-mode 'erc-mode)
 	 (null (erc-default-target)))))
 
+(defun erc-open-server-buffer-p (&optional buffer)
+  "Return non-nil if argument BUFFER is an ERC server buffer that
+has an open IRC process.
+
+If BUFFER is nil, the current buffer is used."
+  (and (erc-server-buffer-p)
+       (erc-server-process-alive)))
+
 (defun erc-query-buffer-p (&optional buffer)
   "Return non-nil if BUFFER is an ERC query buffer.
 If BUFFER is nil, the current buffer is used."

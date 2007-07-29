@@ -12,7 +12,7 @@
 
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; GNU Emacs is distributed in the hope that it will be useful,
@@ -77,7 +77,7 @@ You can control which line is recentered to by customizing the
 variable `erc-input-line-position'.
 
 DISPLAY-START is ignored."
-  (if (and window (window-live-p window))
+  (if (window-live-p window)
       ;; Temporarily bind resize-mini-windows to nil so that users who have it
       ;; set to a non-nil value will not suffer from premature minibuffer
       ;; shrinkage due to the below recenter call.  I have no idea why this

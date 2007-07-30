@@ -1,19 +1,137 @@
+2007-07-30  Michael Olson  <mwolson@gnu.org>
+
+	* erc-nicklist.el: Remove from the Emacs source tree.  This file
+	is not release quality, and relies heavily on a module which
+	cannot be distributed with ERC due to licensing reasons.
+
 2007-07-25  Glenn Morris  <rgm@gnu.org>
 
 	* Relicense all FSF files to GPLv3 or later.
 
+2007-07-13  Michael Olson  <mwolson@gnu.org>
+
+	* erc-goodies.el (erc-get-bg-color-face, erc-get-fg-color-face):
+	Use erc-error rather than message and beep.
+
+	* erc-sound.el: Indentation fix.
+
+	* erc.el (erc-command-no-process-p): New function that determines
+	if its argument is an ERC command that can be run when the server
+	process is not alive.
+	(erc-cmd-SET, erc-cmd-CLEAR, erc-cmd-COUNTRY, erc-cmd-HELP)
+	(erc-cmd-LASTLOG, erc-cmd-QUIT, erc-cmd-GQUIT)
+	(erc-cmd-RECONNECT, erc-cmd-SERVER): Denote that these commands
+	can be run even when the server process is not alive.
+	(erc-send-current-line): Call erc-command-no-process-p if the
+	server process is not alive, to determine if we have a command
+	that can be run anyway.  Thanks to Tom Tromey for the bug report.
+	(erc-error): New function that either displays a message or throws
+	an error, depending on whether debug-on-error is non-nil.
+	(erc-cmd-SERVER, erc-send-current-line): Use it.
+
+2007-06-25  Michael Olson  <mwolson@gnu.org>
+
+	* erc.texi (Options): Fix typo.
+	(Getting Help and Reporting Bugs): Update webpage URL.  Make Gmane
+	part more readable.
+
+2007-06-20  Michael Olson  <mwolson@gnu.org>
+
+	* erc-stamp.el (erc-timestamp-format-left): New option that
+	specifies the left timestamp to use for
+	erc-insert-timestamp-left-and-right.
+	(erc-timestamp-format-right): New option that specifies the right
+	timestamp to use for erc-insert-timestamp-left-and-right.
+	(erc-insert-timestamp-function): Change default to
+	erc-insert-timestamp-left-and-right.
+	(erc-insert-away-timestamp-function): Ditto.
+	(erc-timestamp-last-inserted-left)
+	(erc-timestamp-last-inserted-right): New variables to keep track
+	of data for erc-insert-timestamp-left-and-right.
+	(erc-insert-timestamp-left-and-right): New function that places
+	timestamps on both the left and right sides of the screen, but
+	only if each timestamp has changed since it was last computed.
+	Thanks to offby1 for urging me to merge this.
+
+	* erc.el (erc-open-ssl-stream): Display informative error when
+	ssl.el not found.
+	(erc-tls): New function to connect using tls.el.
+	(erc-open-tls-stream): New function to initiate tls connection.
+	Display informative error when tls.el not found.
+
+2007-06-19  Michael Olson  <mwolson@gnu.org>
+
+	* erc-log.el: Update header with accurate instructions.
+
 2007-06-14  Juanma Barranquero  <lekktu@gmail.com>
 
 	* erc-goodies.el (erc-scroll-to-bottom): Remove redundant check.
+
+2007-06-10  Michael Olson  <mwolson@gnu.org>
+
+	* erc-log.el (erc-logging-enabled): Fix a bug that occurred when
+	`erc-log-channels-directory' had the name of a function.
 
 2007-06-06  Juanma Barranquero  <lekktu@gmail.com>
 
 	* erc.el (erc-show-channel-key-p, erc-startup-file-list):
 	Fix typo in docstring.
 
+2007-05-30  Michael Olson  <mwolson@gnu.org>
+
+	* erc-compat.el (erc-user-emacs-directory): New variable that
+	determines where to find user-specific Emacs settings.  For Emacs,
+	this is usually ~/.emacs.d, and for XEmacs this is usually
+	~/.xemacs.
+
+	* erc.el (erc-startup-file-list): Use erc-user-emacs-directory.
+
+2007-05-28  Michael Olson  <mwolson@gnu.org>
+
+	* erc-button.el (erc-button-url-regexp): Recognize parentheses as
+	part of URLs.  Thanks to Lawrence Mitchell for the fix.
+
 2007-05-26  Michael Olson  <mwolson@gnu.org>
 
 	* erc.texi (Modules): Fix references to completion modules.
+
+2007-04-19  Michael Olson  <mwolson@gnu.org>
+
+	* erc.el (erc-parse-prefix): New function that retrieves the
+	PREFIX server parameter from the current server and returns an
+	alist of prefix type to prefix character.
+	(erc-channel-receive-names): Use `erc-parse-prefix' to determine
+	whether the first character of a nick is a prefix character or
+	not.  This should fix a bug reported by bromine about needing to
+	type "%" first to complete nicks of people who are "hops" on
+	Slashnet.  This should also support for very exotic IRC server
+	setups, if any exist.
+	(erc-update-current-channel-member): Indentation.
+
+2007-04-15  Michael Olson  <mwolson@gnu.org>
+
+	* erc-log.el (erc-generate-log-file-name-function): Docfix.
+	Mention how to deal with the case for putting log files in
+	different directories.  Change a customization type from `symbol'
+	to `function'.
+	(erc-log-channels-directory): Allow this to contain a function
+	name, which is called with the same args as in
+	`erc-generate-log-file-name-function'.  Thanks to andrewy for the
+	report and use case.
+	(erc-current-logfile): Detect if `erc-log-channels-directory' is a
+	function and call it with arguments if so.
+
+2007-04-12  Michael Olson  <mwolson@gnu.org>
+
+	* erc-backend.el (define-erc-response-handler): Mention that hook
+	processing stops when the function returns non-nil.  This should
+	help avoid a nasty "gotcha" when making custom functions.  Thanks
+	to John Sullivan for the report.
+
+2007-04-08  Diane Murray  <disumu@x3y2z1.net>
+
+	* erc-nicklist.el (erc-nicklist-voiced-position): Fixed
+	customization mismatch.
 
 2007-04-01  Michael Olson  <mwolson@gnu.org>
 

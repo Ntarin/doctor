@@ -1007,8 +1007,12 @@ our revision control system.  Our mailing list address changed as well.
 
 @end itemize
 
-@node GNU Free Documentation License, Concept Index, History, Top
-@unnumbered GNU Free Documentation License
+@node Copying, GNU Free Documentation License, History, Top
+@comment  node-name,  next,  previous,  up
+@include gpl.texi
+
+@node GNU Free Documentation License, Concept Index, Copying, Top
+@comment  node-name,  next,  previous,  up
 @include doclicense.texi
 
 @node Concept Index,  , GNU Free Documentation License, Top

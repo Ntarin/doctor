@@ -1461,7 +1461,7 @@ Turning on `erc-mode' runs the hook `erc-mode-hook'."
 (defconst erc-default-server "irc.freenode.net"
   "IRC server to use if it cannot be detected otherwise.")
 
-(defconst erc-default-port "6667"
+(defconst erc-default-port 6667
   "IRC port to use if it cannot be detected otherwise.")
 
 (defcustom erc-join-buffer 'buffer
@@ -1489,6 +1489,14 @@ A value of nil means to use `default-frame-alist'."
 (defcustom erc-frame-dedicated-flag nil
   "*Non-nil means the erc frames are dedicated to that buffer.
 This only has effect when `erc-join-buffer' is set to `frame'."
+  :group 'erc-buffers
+  :type 'boolean)
+
+(defcustom erc-reuse-frames t
+  "*Determines whether new frames are always created.
+Non-nil means that a new frame is not created to display an ERC
+buffer if there is already a window displaying it.  This only has
+effect when `erc-join-buffer' is set to `frame'."
   :group 'erc-buffers
   :type 'boolean)
 
@@ -1889,14 +1897,16 @@ removed from the list will be disabled."
 	((eq erc-join-buffer 'bury)
 	 nil)
 	((eq erc-join-buffer 'frame)
-	 (funcall '(lambda (frame)
+	 (when (or (not erc-reuse-frames)
+		   (not (get-buffer-window buffer t)))
+	   ((lambda (frame)
 		     (raise-frame frame)
 		     (select-frame frame))
 		  (make-frame (or erc-frame-alist
 				  default-frame-alist)))
 	 (switch-to-buffer buffer)
 	 (when erc-frame-dedicated-flag
-	   (set-window-dedicated-p (selected-window) t)))
+	   (set-window-dedicated-p (selected-window) t))))
 	(t
 	 (if (active-minibuffer-window)
 	     (display-buffer buffer)
@@ -2494,7 +2504,8 @@ See also `erc-server-send'."
 is not alive, nil otherwise."
   (let ((fun (erc-extract-command-from-line str)))
     (and fun
-	 (get fun 'process-not-needed))))
+	 (symbolp (car fun))
+	 (get (car fun) 'process-not-needed))))
 
 (defun erc-command-name (cmd)
   "For CMD being the function name of a ERC command, something like
@@ -3245,7 +3256,17 @@ the message given by REASON."
 (defun erc-cmd-GQUIT (reason)
   "Disconnect from all servers at once with the same quit REASON."
   (erc-with-all-buffers-of-server nil #'erc-open-server-buffer-p
-				  (erc-cmd-QUIT reason)))
+				  (erc-cmd-QUIT reason))
+  (when erc-kill-queries-on-quit
+    ;; if the query buffers have not been killed within 4 seconds,
+    ;; kill them
+    (run-at-time
+     4 nil
+     (lambda ()
+       (dolist (buffer (erc-buffer-list (lambda (buf)
+					  (not (erc-server-buffer-p buf)))))
+	 (kill-buffer buffer)))))
+  t)
 
 (defalias 'erc-cmd-GQ 'erc-cmd-GQUIT)
 (put 'erc-cmd-GQUIT 'do-not-parse-args t)
@@ -3253,9 +3274,11 @@ the message given by REASON."
 
 (defun erc-cmd-RECONNECT ()
   "Try to reconnect to the current IRC server."
-  (let ((buffer (or (erc-server-buffer) (current-buffer)))
+  (let ((buffer (erc-server-buffer))
 	(process nil))
-    (with-current-buffer (if (bufferp buffer) buffer (current-buffer))
+    (unless (buffer-live-p buffer)
+      (setq buffer (current-buffer)))
+    (with-current-buffer buffer
       (setq erc-server-quitting nil)
       (setq erc-server-reconnecting t)
       (setq erc-server-reconnect-count 0)
@@ -4994,7 +5017,8 @@ Specifically, return the position of `erc-insert-marker'."
 		(save-restriction
 		  (widen)
 		  (goto-char (point-max))
-		  (set-marker (process-mark erc-server-process) (point))
+		  (when (processp erc-server-process)
+		    (set-marker (process-mark erc-server-process) (point)))
 		  (set-marker erc-insert-marker (point))
 		  (let ((buffer-modified (buffer-modified-p)))
 		    (erc-display-prompt)
@@ -5062,7 +5086,8 @@ This returns non-nil only if we actually send anything."
 	(erc-put-text-property beg (point)
 			       'face 'erc-command-indicator-face)
 	(insert "\n"))
-      (set-marker (process-mark erc-server-process) (point))
+      (when (processp erc-server-process)
+	(set-marker (process-mark erc-server-process) (point)))
       (set-marker erc-insert-marker (point))
       (save-excursion
 	(save-restriction
@@ -5081,7 +5106,8 @@ current position."
 	(erc-put-text-property beg (point)
 			       'face 'erc-input-face))
       (insert "\n")
-      (set-marker (process-mark erc-server-process) (point))
+      (when (processp erc-server-process)
+	(set-marker (process-mark erc-server-process) (point)))
       (set-marker erc-insert-marker (point))
       (save-excursion
 	(save-restriction

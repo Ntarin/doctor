@@ -68,6 +68,10 @@ and modified without restriction.
 * Advanced Usage::              Cool ways of using ERC.
 * Getting Help and Reporting Bugs::  
 * History::                     The history of ERC.
+* Copying::                     The GNU General Public License gives you
+                                  permission to redistribute ERC on
+                                  certain terms; it also explains that
+                                  there is no warranty.
 * GNU Free Documentation License:: The license for this documentation.
 * Concept Index::               Search for terms.
 
@@ -945,7 +949,7 @@ questions.
 @end itemize
 
 
-@node History, GNU Free Documentation License, Getting Help and Reporting Bugs, Top
+@node History, Copying, Getting Help and Reporting Bugs, Top
 @comment  node-name,  next,  previous,  up
 @chapter History
 @cindex history, of ERC

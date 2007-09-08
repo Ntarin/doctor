@@ -3,7 +3,7 @@
 # Load common definitions
 . scripts/common.defs
 
-(cd $LISP/erc && find . -maxdepth 1 -mindepth 1 -type f -exec cp {} $OLDPWD \;)
-cp $ETC/ERC-NEWS etc/
-cp $MAN/erc.texi man/
+(cd $EMACS/lisp/erc && find . -maxdepth 1 -mindepth 1 -type f -exec cp {} $OLDPWD \;)
+cp $EMACS/etc/ERC-NEWS NEWS
+cp $EMACS/doc/misc/erc.texi .
 rm -f *.elc

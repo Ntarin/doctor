@@ -16,6 +16,7 @@ done
 
 for i in $IMAGES; do
     # Do nothing
+    :
 done
 
 cp $NEWS $EMACS/etc/ERC-NEWS

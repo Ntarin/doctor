@@ -164,6 +164,11 @@ Vivek Dasmohapatra <vivek AT etla DOT org>:
 Ivan Kanis <apple AT kanis DOT eu>:
   * Fixed window ordering bug in erc-goodies.el (1 line changed).
 
+Exal de Jesus Garcia Carrillo  <exal AT gnu DOT org>:
+  * Fixed some typos in the documentation.
+
+Aidan Kehoe  <kehoea AT parhasard DOT net>:
+  * Fixed a bug with log buffers in XEmacs in erc-log.el (1 line changed).
 
 ----
 

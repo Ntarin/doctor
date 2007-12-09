@@ -1,7 +1,14 @@
+2007-12-09  Michael Olson  <mwolson@gnu.org>
+
+	* erc-services.el (erc-nickserv-alist): Fix regexps for GRnet.
+
 2007-12-09  Giorgos Keramidas  <keramida@ceid.upatras.gr>  (tiny change)
 
 	* erc-backend.el, erc.el:
 	Parse 275 (secure connection) responses.
+
+	* erc-services.el: Add identification hooks for GRnet, the Greek
+	IRC network <http://www.irc.gr>.
 
 2007-12-08  David Kastrup  <dak@gnu.org>
 

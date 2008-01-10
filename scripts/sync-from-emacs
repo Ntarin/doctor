@@ -6,4 +6,4 @@
 (cd $EMACS/lisp/erc && find . -maxdepth 1 -mindepth 1 -type f -exec cp {} $OLDPWD \;)
 cp $EMACS/etc/ERC-NEWS NEWS
 cp $EMACS/doc/misc/erc.texi .
-rm -f *.elc
+rm -f *.elc .cvsignore

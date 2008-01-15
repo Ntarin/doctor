@@ -7,6 +7,22 @@
 
 	* erc-status.el: New file providing support for displaying a
 	status icon in the notification area.
+	(erc-status-icon): Rename from erc-status-status-icon.
+	(erc-status): New customization group.
+	(erc-status-icon-file): New option indicating the name of the file
+	to use as an icon.
+	(erc-status-init-maybe): New function that creates the status icon
+	if it does not already exist.
+	(erc-status-update): New function that safely updates the existing
+	status icon.
+	(erc-status-remove-buffer): Use erc-status-update.
+	(erc-status-add-buffer): Use `unless' instead of `and' and `or'.
+	(erc-status-window-configuration-changed): Use `dolist' instead of
+	`while'.  Use erc-status-update.
+	(erc-status-after-connect): If the status icon has not already
+	been made, make it.
+	(status): Don't make the icon until we have connected to
+	something.  This gives the user a change to set erc-status-icon.
 
 2008-01-10  Michael Olson  <mwolson@gnu.org>
 

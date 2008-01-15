@@ -51,27 +51,50 @@
 (require 'erc)
 
 ;; The status icon object.
-(defvar erc-status-status-icon nil)
+(defvar erc-status-icon nil)
 
 ;; List of ERC buffers that caused the status icon to blink.
 (defvar erc-status-buffer-list nil)
+
+(defgroup erc-status nil
+  "Notification area support for ERC."
+  :group 'erc)
+
+(defcustom erc-status-icon-file nil
+  "The filename of the icon to display in the notification area."
+  :group 'erc-status
+  :type '(choice (const :tag "None" nil)
+		 file))
+
+(defun erc-status-init-maybe ()
+  (unless (status-icon-live-p erc-status-icon)
+    (setq erc-status-icon
+	  (make-status-icon
+	   `((help-echo . "ERC - IRC client for Emacs")
+	     (click-callback . #'erc-status-select-first-buffer)
+	     (icon-name . ,erc-status-icon-file))))))
+
+(defun erc-status-update (status-alist)
+  "Modify the status icon according to STATUS-ALIST."
+  (when (status-icon-live-p erc-status-icon)
+    (condition-case nil
+	(modify-status-icon-parameters erc-status-icon status-alist)
+      (error nil))))
 
 (defun erc-status-remove-buffer (buffer)
   ;; If the list is not empty, and removing an element makes the list
   ;; empty, stop blinking.
   (and erc-status-buffer-list
        (not (setq erc-status-buffer-list (delq buffer erc-status-buffer-list)))
-       (modify-status-icon-parameters erc-status-status-icon
-				      '((blinking . nil)))))
+       (erc-status-update '((blinking . nil)))))
 
 (defun erc-status-add-buffer (buffer)
-  (and (not (erc-buffer-visible buffer))
-       (progn
-	 (modify-status-icon-parameters erc-status-status-icon
-					'((blinking . t)))
-	 (or (memq buffer erc-status-buffer-list)
-	     (setq erc-status-buffer-list (cons buffer
-						erc-status-buffer-list))))))
+  (unless (erc-buffer-visible buffer)
+    (erc-status-init-maybe)
+    (erc-status-update '((blinking . t)))
+    (unless (memq buffer erc-status-buffer-list)
+      (setq erc-status-buffer-list (cons buffer
+					 erc-status-buffer-list)))))
 
 (defun erc-status-match-hook (match-type nick message)
   ;; Look for user's nick and make the icon blink.
@@ -83,24 +106,22 @@
   (erc-status-remove-buffer (current-buffer)))
 
 (defun erc-status-window-configuration-changed ()
-  (let ((new-list)
-	(iter erc-status-buffer-list))
-    (while iter
-      (or (erc-buffer-visible (car iter))
-	  (setq new-list (cons (car iter) new-list)))
-      (setq iter (cdr iter)))
-    (or (setq erc-status-buffer-list new-list)
-	(modify-status-icon-parameters erc-status-status-icon
-				       '((blinking . nil))))))
+  (let ((new-list))
+    (dolist (buffer erc-status-buffer-list)
+      (unless (erc-buffer-visible buffer)
+	(setq new-list (cons buffer new-list))))
+    (unless (setq erc-status-buffer-list new-list)
+      (erc-status-update '((blinking . nil))))))
 
 (defun erc-status-disconnected (nick ip reason)
   ;; FIXME: should mention the server from which we were disconnected.
   ;; FIXME: add a :action to reconnect.
-  (show-status-icon-message erc-status-status-icon
+  (show-status-icon-message erc-status-icon
 			    (concat "Disconnected: " reason)))
 
 (defun erc-status-after-connect (server nick)
-  (show-status-icon-message erc-status-status-icon
+  (erc-status-init-maybe)
+  (show-status-icon-message erc-status-icon
 			    (concat "Connected to " server " as " nick)))
 
 (defun erc-status-select-first-buffer ()
@@ -136,12 +157,7 @@ If there is no such buffer, do nothing."
 (define-erc-module status nil
   "Notification area support for ERC."
   ;; Enable.
-  ((unless erc-status-status-icon
-     (setq erc-status-status-icon
-	   (make-status-icon
-	    '((help-echo . "ERC - IRC client for Emacs")
-	      (click-callback . #'erc-status-select-first-buffer)))))
-   (add-hook 'erc-text-matched-hook 'erc-status-match-hook)
+  ((add-hook 'erc-text-matched-hook 'erc-status-match-hook)
    (add-hook 'kill-buffer-hook 'erc-status-buffer-killed)
    (add-hook 'window-configuration-change-hook
 	     'erc-status-window-configuration-changed)
@@ -152,9 +168,9 @@ If there is no such buffer, do nothing."
    (add-hook 'erc-server-PRIVMSG-functions 'erc-status-PRIVMSG t))
 
   ;; Disable.
-  ((when erc-status-status-icon
-     (delete-status-icon erc-status-status-icon)
-     (setq erc-status-status-icon nil))
+  ((when erc-status-icon
+     (delete-status-icon erc-status-icon)
+     (setq erc-status-icon nil))
    (remove-hook 'erc-text-matched-hook 'erc-status-match-hook)
    (remove-hook 'kill-buffer-hook 'erc-status-buffer-killed)
    (remove-hook 'window-configuration-change-hook

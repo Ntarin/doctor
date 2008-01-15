@@ -1865,6 +1865,7 @@ removed from the list will be disabled."
     (const :tag "sound: Play sounds when you receive CTCP SOUND requests"
 	   sound)
     (const :tag "stamp: Add timestamps to messages" stamp)
+    (const :tag "status: Notification area support" status)
     (const :tag "spelling: Check spelling" spelling)
     (const :tag "track: Track channel activity in the mode-line" track)
     (const :tag "truncate: Truncate buffers to a certain size" truncate)

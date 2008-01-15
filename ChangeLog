@@ -5,6 +5,9 @@
 	as the first and only argument.  It's not good to just depend on a
 	dynamic binding.
 
+	* erc-status.el: New file providing support for displaying a
+	status icon in the notification area.
+
 2008-01-10  Michael Olson  <mwolson@gnu.org>
 
 	* erc-backend.el (321, 322): Split message-displaying parts into

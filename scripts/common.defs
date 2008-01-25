@@ -28,6 +28,7 @@ erc-identd.el
 erc-imenu.el
 erc-join.el
 erc-lang.el
+erc-list.el
 erc-log.el
 erc-match.el
 erc-menu.el

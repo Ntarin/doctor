@@ -183,9 +183,10 @@ elpa: $(MANUAL).info
 	mkdir -p $(ELPA)/$(SNAPDIR) && chmod 0755 $(ELPA)/$(SNAPDIR)
 	cp $(UNCOMPILED) $(SOURCE) $(ELPA)/$(SNAPDIR)
 	cp -r images $(ELPA)/$(SNAPDIR)
-	cp erc-pkg.el $(ELPA)/$(SNAPDIR)
+	sed -r -e "s/%VERSION%/$(VERSION)/g" < erc-pkg.el \
+	  > $(ELPA)/$(SNAPDIR)/erc-pkg.el
 	cp $(MANUAL).info $(ELPA)/$(SNAPDIR)
-	cp dir-template $(ELPADIR)/$(SNAPDIR)/dir
+	cp dir-template $(ELPA)/$(SNAPDIR)/dir
 	install-info --section "Emacs" "Emacs" \
 	  --info-dir=$(ELPA)/$(SNAPDIR) \
 	  $(ELPA)/$(SNAPDIR)/$(MANUAL).info

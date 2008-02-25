@@ -7,3 +7,4 @@
 cp $EMACS/etc/ERC-NEWS NEWS
 cp $EMACS/doc/misc/erc.texi .
 rm -f *.elc .cvsignore
+git diff --stat

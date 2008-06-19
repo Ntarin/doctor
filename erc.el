@@ -5040,9 +5040,9 @@ each property to the corresponding value in VALUE-LIST."
     (setq value-list (mapcar (lambda (x)
 			       t)
 			     properties)))
-  (dotimes (i (min (length properties) (length value-list)))
-    (erc-put-text-property start end (nth i properties)
-			   (nth i value-list) object)))
+  (mapcar* (lambda (prop value)
+	     (erc-put-text-property start end prop value object))
+	   properties value-list))
 
 ;;; Input area handling:
 

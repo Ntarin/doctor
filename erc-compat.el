@@ -44,6 +44,7 @@ See `erc-encoding-coding-alist'."
 
 (defalias 'erc-propertize 'propertize)
 (defalias 'erc-view-mode-enter 'view-mode-enter)
+(autoload 'help-function-arglist "help-fns")
 (defalias 'erc-function-arglist 'help-function-arglist)
 (defalias 'erc-delete-dups 'delete-dups)
 (defalias 'erc-replace-regexp-in-string 'replace-regexp-in-string)

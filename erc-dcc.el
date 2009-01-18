@@ -377,7 +377,8 @@ created subprocess, or nil."
               (when (fboundp 'set-process-coding-system)
                 (set-process-coding-system process 'binary 'binary))
               (when (fboundp 'set-process-filter-multibyte)
-                (set-process-filter-multibyte process nil))))
+                (with-no-warnings       ; obsolete since 23.1
+                  (set-process-filter-multibyte process nil)))))
         (file-error
          (unless (and (string= "Cannot bind server socket" (cadr err))
                       (string= "address already in use" (caddr err)))
